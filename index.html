@@ -194,7 +194,7 @@ strategyChanges.unshift(
   ["2026-07-28","MSFT","新增 10 股（核心/交易 6/4）；财报前冻结新增，卖点 $406/$425/$445，风险 $365，连续两日站上 $400 后才可接回。"],
   ["2026-07-28","换仓候选","新增 QLD：较 GGLL 更分散的 Nasdaq-100 每日 2 倍工具；当前 $79.45、趋势未确认，状态“继续观察”、0 股。"]
 );
-const strategyDisplayDate="2026-07-28";
+const strategyDisplayDate=new Intl.DateTimeFormat("sv-SE",{timeZone:"Asia/Shanghai",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
 strategyChanges.splice(0,strategyChanges.length,...strategyChanges.filter(function(x){return String(x[0]).slice(0,10)===strategyDisplayDate;}));
 strategyLog.unshift(
   ["2026-07-28","A 股按 7 月 28 日完整收盘重置 +15% 基线；旧组合回撤暂停解除，个股风险线不变。"],
