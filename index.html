@@ -259,8 +259,23 @@ function activeExecution(actionKey){return activeExecutions().find(function(x){r
 function soldAvailable(symbol){
   return activeExecutions().filter(function(x){return x.symbol===symbol}).reduce(function(total,x){return total+(x.side==="sell"?x.quantity:-x.quantity)},0);
 }
+function localExecutionRequest(method,body){
+  let rows=[];
+  try{rows=JSON.parse(localStorage.getItem("portfolioLocalExecutions")||"[]")}catch(error){rows=[]}
+  if(method==="GET")return Promise.resolve({executions:rows});
+  if(method==="POST"){
+    if(rows.some(function(x){return !x.undone_at&&x.action_key===body.actionKey}))return Promise.reject(new Error("这项策略已经确认执行"));
+    const row={id:"local-"+crypto.randomUUID(),action_key:body.actionKey,symbol:body.symbol,market:body.market,side:body.side,quantity:body.quantity,price:body.price,action_label:body.actionLabel,rotation_key:body.rotationKey||null,executed_at:body.executedAt,created_at:new Date().toISOString(),undone_at:null};
+    rows.push(row);localStorage.setItem("portfolioLocalExecutions",JSON.stringify(rows));return Promise.resolve({execution:row});
+  }
+  if(method==="DELETE"){
+    const row=rows.find(function(x){return x.id===body.id&&!x.undone_at});if(!row)return Promise.reject(new Error("未找到可撤销的成交"));
+    row.undone_at=new Date().toISOString();localStorage.setItem("portfolioLocalExecutions",JSON.stringify(rows));return Promise.resolve({id:row.id});
+  }
+  return Promise.reject(new Error("不支持的成交操作"));
+}
 function apiRequest(method,body){
-  if(!portfolioSyncKey)return Promise.reject(new Error("请使用私有成交同步链接打开页面后再确认。"));
+  if(!portfolioSyncKey)return localExecutionRequest(method,body);
   return fetch(executionApiBase+"/api/executions",{
     method:method,
     headers:{"Authorization":"Bearer "+portfolioSyncKey,"Content-Type":"application/json"},
@@ -299,12 +314,11 @@ function applyExecutionState(){
 }
 async function loadExecutions(){
   applyExecutionState();
-  if(!portfolioSyncKey){setSyncStatus("只读模式：请使用私有同步链接","error");return}
   try{
     const payload=await apiRequest("GET");
     executionRecords=payload.executions||[];
     applyExecutionState();
-    setSyncStatus("成交记录已跨设备同步","ok");
+    setSyncStatus(portfolioSyncKey?"成交记录已跨设备同步":"本机成交记录模式",portfolioSyncKey?"ok":"");
   }catch(error){
     setSyncStatus(error.message||"成交同步不可用","error");
   }
@@ -314,8 +328,7 @@ function executionControl(action){
   if(done)return '<div class="executed-mark">✓ 已执行<br>'+done.quantity+' 股 @ '+fmt(done.price,done.market==="cn"?"¥":"$")+'</div><button class="undo-btn" data-undo-id="'+esc(done.id)+'" type="button">撤销</button>';
   if(!action.quantity)return '<button class="exec-btn" type="button" disabled title="暂无可执行股数">等待可执行</button>';
   const encoded=encodeURIComponent(JSON.stringify(action));
-  const disabled=!portfolioSyncKey?" disabled title=\"请使用私有同步链接\"":"";
-  return '<button class="exec-btn" data-execution="'+encoded+'" type="button"'+disabled+'>确认已执行</button>';
+  return '<button class="exec-btn" data-execution="'+encoded+'" type="button">确认已执行</button>';
 }
 function defaultReentryQuantity(symbol,market){
   const sold=Math.max(0,soldAvailable(symbol)),raw=Math.floor(sold/3);
@@ -377,7 +390,7 @@ async function submitExecution(event){
     });
     const payload=await apiRequest("GET");executionRecords=payload.executions||[];applyExecutionState();
     document.getElementById("execution-dialog").close();pendingExecution=null;renderPortfolioView();
-    setSyncStatus("成交已确认并跨设备同步","ok");
+    setSyncStatus(portfolioSyncKey?"成交已确认并跨设备同步":"成交已保存到本机浏览器",portfolioSyncKey?"ok":"");
   }catch(error){errorEl.textContent=error.message||"成交同步失败"}finally{button.disabled=false}
 }
 async function undoExecution(id){
@@ -385,7 +398,7 @@ async function undoExecution(id){
   try{
     await apiRequest("DELETE",{id:id});
     const payload=await apiRequest("GET");executionRecords=payload.executions||[];applyExecutionState();renderPortfolioView();
-    setSyncStatus("成交已撤销并同步","ok");
+    setSyncStatus(portfolioSyncKey?"成交已撤销并同步":"本机成交已撤销",portfolioSyncKey?"ok":"");
   }catch(error){setSyncStatus(error.message||"无法撤销成交","error")}
 }
 function renderPortfolioView(){
