@@ -28,23 +28,17 @@ main{max-width:1240px;margin:auto;padding:28px 20px 44px}.hero{display:flex;gap:
 <main>
   <section class="hero">
     <div><h1>持仓路线图</h1><p>核心仓与交易仓分离管理。A 股、美股独立考核；不新增现金，只能使用本市场减仓所得资金接回。</p></div>
-    <div class="stamp">美股新基准：2026-07-28 10:13 ET<br>A 股基准：2026-07-27 收盘<br>策略线只按完整正常时段收盘校准</div>
+    <div class="stamp">美股新基准：2026-07-28 10:13 ET<br>A 股新基准：2026-07-28 收盘<br>策略线只按完整正常时段收盘校准</div>
   </section>
   <section class="panel strategy-banner"><h2>策略变动</h2><p>只记录会改变实际执行的调整；每日价格刷新但策略线未变时，不重复记入。</p><div id="strategy-changes"></div></section>
   <section class="panel rotation-panel">
     <div class="module-head"><div><h2>换仓/清仓策略建议</h2><p>追踪需要退出的持仓、替换候选与触发条件；结论变化会同步到飞书。</p></div><div id="rotation-date" class="module-date"></div></div>
     <div id="rotation-strategy"></div>
   </section>
-  <div class="rule"><strong>阶段目标：截至 2026-08-31，美股相对 2026-07-28 新持仓快照、A 股相对 2026-07-27 收盘分别 +15%；最大回撤 -8%</strong>这是组合情景目标，不是收益承诺，也不用于机械倒推个股目标价。回撤触及 -8% 时停止接回；盘前/盘后可触发提醒，策略线只按正常时段完整收盘校准。<br><span class="goal-line">当前重点：MSFL 与 GGLL 都是单股每日 2 倍 ETF，并非指数；两者合计占美股净值 47.6%，财报前先降重复杠杆。</span></div>
+  <div class="rule"><strong>阶段目标：截至 2026-08-31，美股相对 2026-07-28 10:13 ET 快照、A 股相对 2026-07-28 完整收盘分别 +15%；最大回撤 -8%</strong>这是组合情景目标，不是收益承诺，也不用于机械倒推个股目标价。两市场都允许短线交易、调仓与换仓，但只能使用本市场实际卖出所得现金；触及各自新基准 -8% 时暂停买入/接回。<br><span class="goal-line">当前重点：美股先降低 MSFL/GGLL 重复杠杆；A 股旧基准造成的组合级暂停已解除，但麦格米特自身风控仍已触发。</span></div>
   <section class="two top-rules">
     <section class="panel"><h2>组合集中度与执行顺序</h2><div id="concentration"></div></section>
     <section class="panel"><h2>共用纪律</h2><ul class="research"><li>策略价只用完整正常交易时段收盘校准；盘前、正常交易与盘后报价均可触发临界点提醒。</li><li>回踩买入仅可使用同市场已卖现金；风控卖出后，需连续两日正常时段收盘高于接回确认线才可接回。</li><li>接回上限为此前已卖股数；首笔只接回 1/3，其余等待财报、公告或趋势确认。</li><li>核心仓不是“永不卖”：基本面失效、监管/业绩重大偏差，或组合回撤线触发时重新评估。</li></ul></section>
-  </section>
-  <section class="panel extended-hours">
-    <h2>美股盘前／盘后交易与预警规则 <span class="extended-status">已纳入监控</span></h2>
-    <p>美股延长交易时段可以成交，因此盘前或盘后价格达到策略点也会触发飞书提醒。时段以行情源返回的市场状态为准；夏令时北京时间大致如下，冬令时整体顺延一小时。</p>
-    <div class="session-grid"><div class="session-card"><b>盘前约 16:00–21:30</b><small>新增 17:35、20:35 两次监控；到达卖点可提示限价卖出。</small></div><div class="session-card"><b>正常时段约 21:30–04:00</b><small>用于校准趋势、策略价和收盘确认；22:35 保留监控。</small></div><div class="session-card"><b>盘后约 04:00–08:00</b><small>04:35、07:35 监控财报跳空和到价情况。</small></div></div>
-    <ul class="research"><li><b>卖出点：</b>盘前/盘后可执行报价达到或超过三档卖点时，飞书注明“盘前”或“盘后”、计划卖出股数、最新价与报价时间；只使用限价单，不使用市价单。</li><li><b>报价质量：</b>优先确认可成交买一/卖一；点差不超过约 0.5%或不超过该标的正常点差的两倍，并有足够挂单量时才提示“可执行”。报价过期、点差过大或只有孤立成交时，只提示观察。</li><li><b>风险线：</b>延长时段跌破风险线会立即预警；默认仍等待正常时段收盘确认。若由已核实的财报/公告引发且价格持续、流动性合格，可提示用限价单提前保护交易仓。</li><li><b>买入/接回：</b>盘前/盘后进入买入带先提示观察；仍须满足实际现金池、组合回撤、财报冻结和正常时段趋势确认，不因一笔延长时段成交直接追入。</li><li><b>去重：</b>按“本地日期＋标的＋动作＋盘前/正常/盘后”去重；同一时段同一动作不重复轰炸，跨时段持续触发时只在可执行性或价格状态变化后再次提醒。</li></ul>
   </section>
   <section id="metrics" class="grid" aria-label="账户概览"></section>
   <section class="panel"><h2>8 月 31 日组合情景检验</h2><div id="scenarios"></div><p class="method">情景把当前八只持仓分别代入风险线或技术阻力位，只检验组合可能结果，不用于倒推个股目标价。实际结果还受减仓顺序、现金留存、财报跳空、每日杠杆复位和相关性影响。</p></section>
@@ -142,8 +136,8 @@ const alertLog = [["2026-07-28","麦格米特","减仓已触发·正常","收盘
 
 /* 2026-07-28 用户确认的新美股持仓。旧美股对象保留在源码历史中，但在渲染前移除，
    以便策略变更记录可追溯；页面和监控只使用下面五只最新持仓。 */
-goal.baselineDate={us:"2026-07-28 10:13 ET",cn:"2026-07-27 收盘"};
-goal.baseline={us:26387.40,cn:296846.00};
+goal.baselineDate={us:"2026-07-28 10:13 ET",cn:"2026-07-28 收盘"};
+goal.baseline={us:26387.40,cn:272057.00};
 ["GOOG","GGLL","APH","KLAC","AMAT","MU"].forEach(function(k){
   delete stocks[k]; delete fetchedPrice[k]; delete quoteDetails[k]; delete seriesCloseOverrides[k]; delete updates[k];
 });
@@ -171,18 +165,28 @@ Object.assign(updates,{
   MSFL:[["2026-07-28 10:37 ET","正常交易","$16.33，买一/卖一 $16.32/$16.34；财报前减 80 股建议已通知但未确认成交，不重复提示接回。"],["2026-07-28","产品规则","MSFL 是微软单股每日 2 倍 ETF，不是指数；多日收益会受路径与波动损耗影响。"]],
   GOOG:[["2026-07-28 10:37 ET","正常交易","$327.68，买一/卖一 $327.68/$327.71；仍低于 20/60 日均线，未进入卖出或风险触发区。"],["2026-07-22","财报","收入 +24%、Cloud +82%；剔除巨额股权投资收益，并计入高资本开支后维持 $315–$370 正常化估值区间。"]],
   GGLL:[["2026-07-28 10:37 ET","卖出临界提醒","$93.93，买一 $93.92，距 $94.70 第一档约 0.8%，已进入 1.5% 提醒范围；尚未到执行价，继续等待可执行 bid ≥ $94.70 后限价卖 50 股。"],["2026-07-28","组合风险","GGLL 与 GOOG 合并后 Alphabet 等效敞口约 95.4%；不新增 GGLL，优先降低重复杠杆。"]],
-  AAPL:[["2026-07-28 10:37 ET","正常交易","$337.98，买一/卖一 $337.96/$338.00；RSI 仍偏高，7 月 30 日财报前冻结新增。"],["2026-07-30","催化剂","FY26 Q3 财报盘后披露；核对 iPhone、服务、中国区、毛利率与现金回购。"]]
+  AAPL:[["2026-07-28 10:37 ET","正常交易","$337.98，买一/卖一 $337.96/$338.00；RSI 仍偏高，7 月 30 日财报前冻结新增。"],["2026-07-30","催化剂","FY26 Q3 财报盘后披露；核对 iPhone、服务、中国区、毛利率与现金回购。"]],
+  "紫光股份":[["2026-07-28 15:30","收盘","¥41.48；A 股已按本次完整收盘重设基准，旧组合暂停解除，但实际现金池仍为 0。日内进入 ¥39.50–¥41.00 回踩带只作观察。"],["2026-07-11","业绩预告","H1 扣非利润预计增长，但需剔除 2.5–3.5 亿元不可持续非经常性收益；正式半年报继续核对现金流和毛利率。"]],
+  "海思科":[["2026-07-28 15:30","收盘","¥64.31，处在 ¥63–¥66 回踩带但低于 20 日均线约 ¥70.79；实际现金为 0，且需先站回 ¥66.50 才视作短线止跌确认。"],["2026-04-27","一季报","收入和利润包含 HSK39004 授权/技术转让影响，策略继续按剔除首付款后的正常化盈利评估。"]],
+  "麦格米特":[["2026-07-28 15:30","减仓已触发","正常收盘 ¥117.57 ≤ ¥118，下一交易时段退出 1,000 股交易仓；若随后两日仍不能重回 ¥124，再减 300 股；≤¥112 或正常化业绩恶化时退出余下 400 股。"],["2026-04-29","一季报","收入 +20.35%，但扣非净利 -56.23%、经营现金流 -92.46%；AI 电源增长尚未充分转成利润。"]]
 });
-rotationStrategy.updated="2026-07-28 22:13 CST";
-rotationStrategy.summary="美股新基线为 2026-07-28 10:13 ET 的五只完整持仓快照 $26,387.40；8 月 31 日 +15% 情景目标为 $30,345.51。当前 MSFL 与 GGLL 均为单股每日 2 倍 ETF，合计占净值 47.6%，微软等效敞口约 39.5%、Alphabet 等效敞口约 95.4%。科学路径是财报前先降单股杠杆，而不是为了 +15% 继续加码。";
+Object.assign(stocks["紫光股份"],{buyMode:"¥39.50–¥41.00 仅是回踩观察带；须先有同市场实际卖出现金且收盘确认止跌，短线交易仓才可按 100 股执行。A 股新基准未触及组合回撤线。"});
+Object.assign(stocks["海思科"],{buyMode:"¥63–¥66 仅作观察；先看收盘重新站上 ¥66.50，再用同市场实际卖出现金按 100 股交易。风控后仍需连续两日收盘 ≥ ¥70.50 才接回。"});
+Object.assign(stocks["麦格米特"],{buyMode:"不补跌。已触发的 1,000 股交易仓退出优先；其后两日不能重回 ¥124 再减 300 股，收盘 ≤ ¥112 或正常化业绩继续恶化则退出余下 400 股。"});
+rotationStrategy.updated="2026-07-28 23:05 CST";
+rotationStrategy.summary="美股基线 $26,387.40、8 月 31 日 +15% 情景目标 $30,345.51；A 股以 7 月 28 日完整收盘 ¥272,057.00 重置基线，目标 ¥312,865.55，新回撤线 ¥250,292.44。A 股旧基准造成的组合级暂停已解除，但实际现金仍为 0，麦格米特的个股风控不会因重设目标而失效。允许短买短卖和同市场换仓，不为追求 +15% 机械提高卖点或放宽风险线。";
 rotationStrategy.items=[
   {kind:"财报前降杠杆",style:"exit",from:"MSFL 200 股",to:"MSFL 120 股＋美股现金池",action:"7 月 29 日微软盘后财报前，建议限价卖出 80 股；未确认成交前页面仍按 200 股和现金 0 计算。",timing:"这是事件风险与重复暴露控制，不要求高于成本才执行。财报通过后也不自动买回；只有 MSFT 连续两日正常收盘站上 $400 才重新评估。",reason:"MSFL 占净值 12.3%，叠加直接 MSFT 后微软等效敞口约 39.5%；MSFL 每日复位且财报跳空会被约 2 倍放大。",source:["GraniteShares MSFL 官方资料","https://graniteshares.com/etfs/msfl/"],source2:["Microsoft 财报日程","https://news.microsoft.com/source/2026/07/08/microsoft-announces-quarterly-earnings-release-date-68/"]},
   {kind:"集中度减仓",style:"exit",from:"GGLL 100 股",to:"GGLL 50 股＋美股现金池",action:"可执行报价进入 $94.70–$96.00 时，先限价卖出 50 股；剩余交易仓按 $101/$110/$122 分档。",timing:"不加仓、不摊低。若 GOOG 正常收盘跌破 $309 或 GGLL 跌破 $86，退出剩余交易仓；只有用户确认成交才增加现金池。",reason:"GGLL 占净值 35.3%，与 GOOG 叠加后的 Alphabet 等效敞口约 95.4%，单日 2 倍与波动损耗不适合作为核心仓。",source:["Direxion GGLL 官方资料","https://www.direxion.com/product/daily-googl-bull-and-bear-leveraged-single-stock-etfs"]},
   {kind:"2 倍指数候选",style:"candidate",from:"GGLL 完整退出后的名额",to:"QLD（ProShares Ultra QQQ）",action:"当前 $79.45、低于 20/60 日均线，状态为继续观察、建议 0 股；不在微软和苹果财报前抢反弹。",timing:"只有 GGLL 已实际清仓、不增加持仓数，且 QLD 正常收盘重新站上 $84.50、同市场现金充足后，才计算买入股数；初始上限为美股净值 10%。",reason:"QLD 同为每日 2 倍，但底层是 Nasdaq-100 约百家公司，较 GGLL 单一 Alphabet 风险更分散；它仍有每日复位和波动损耗，所以只能是交易仓。",source:["ProShares QLD 官方资料","https://www.proshares.com/our-etfs/leveraged-and-inverse/qld"]},
   {kind:"财报后候选",style:"candidate",from:"已清仓标的腾出的名额",to:"VRT",action:"7 月 29 日 Q2 披露前建议 0 股；财报后核对收入、有机增长、调整后营业利润率、自由现金流和全年指引，再决定是否替换杠杆仓。",timing:"VRT 与 QLD 二选一，不新增持仓数；没有实际卖出现金或财报验证不通过时保持 0 股。",reason:"AI 数据中心电力与热管理需求强，但高估值已计入很强增长，财报跳空风险大，不能只凭主题追高。",source:["Vertiv Q1 2026 官方业绩","https://investors.vertiv.com/news/news-details/2026/Vertiv-Reports-Strong-First-Quarter-with-Diluted-EPS-Growth-of-136-Adjusted-Diluted-EPS-Growth-of-83-Raises-Full-Year-Guidance/default.aspx"],source2:["Vertiv Q2 披露日程","https://investors.vertiv.com/news/news-details/2026/Vertiv-Announces-Date-of-Second-Quarter-2026-Earnings-Release-and-Conference-Call/default.aspx"]},
-  {kind:"减仓已触发",style:"exit",from:"麦格米特",to:"A 股现金池／核心仓退出复核",action:"7 月 28 日正常收盘 ¥117.57 ≤ ¥118 风控线；下一交易时段退出剩余 1,000 股交易仓。",timing:"未确认成交前不增加现金池；700 股核心仓按基本面失效条件复核。A 股组合仍暂停所有买入/接回。",reason:"技术结构已按正常收盘确认失效；Q1 扣非净利 -56.23%、经营现金流 -92.46%，AI 电源增长尚未充分兑现为利润。",source:["深交所麦格米特行情","https://www.szse.cn/api/market/ssjjhq/getTimeData?marketId=1&code=002851"],source2:["麦格米特 2026 年第一季度报告","https://static.cninfo.com.cn/finalpage/2026-04-29/1225238066.PDF"]}
+  {kind:"减仓已触发",style:"exit",from:"麦格米特",to:"A 股现金池／最多保留 400 股观察仓",action:"7 月 28 日正常收盘 ¥117.57 ≤ ¥118：下一交易时段退出 1,000 股交易仓；若随后两个完整收盘仍不能重回 ¥124，再减 300 股。",timing:"未确认成交前不增加现金池，也不假设仓位已变。剩余 400 股仅在收盘不低于 ¥112 且后续正常化利润/现金流出现改善时保留；收盘 ≤ ¥112 或正式业绩继续恶化则退出。",reason:"收盘显著低于 20/60 日均线约 ¥144.73/¥144.09，ATR20 约 ¥12.93、RSI14 约 39，技术结构已破；Q1 扣非净利 -56.23%、经营现金流 -92.46%，AI 电源增长尚未兑现为正常化利润。",source:["深交所麦格米特行情","https://www.szse.cn/api/market/ssjjhq/getTimeData?marketId=1&code=002851"],source2:["麦格米特 2026 年第一季度报告","https://static.cninfo.com.cn/finalpage/2026-04-29/1225238066.PDF"]},
+  {kind:"高潜力观察",style:"candidate",from:"A 股已完整清仓标的腾出的名额",to:"中际旭创（300308）",action:"基本面通过、技术与仓位约束未通过，当前建议 0 股；不在 7 月 28 日大跌后抢反弹。",timing:"只有一个现有 A 股标的已实际完整退出、现金到账，且中际旭创至少连续两个完整收盘企稳并重新站上 ¥1,000 后才复核。按 100 股一手约需 ¥100,000，约占当前 A 股基线 36.8%，明显高于初始 10%–15% 仓位上限，因此现阶段即使趋势修复也不直接买入。",reason:"2026 Q1 收入 ¥194.96 亿、+192.12%，扣非净利 ¥57.18 亿、+264.56%，经营现金流 ¥33.68 亿、+55.58%，正常化增长和现金流质量强；但 7 月 28 日收 ¥908，低于 20/60 日均线约 ¥1,098.97/¥1,123.70，ATR20 约 ¥90、年化波动约 108%，技术结构和 A 股整手集中度均不合格。",source:["中际旭创 2026 年第一季度报告","https://static.cninfo.com.cn/finalpage/2026-04-17/1225111941.PDF"],source2:["深交所中际旭创行情","https://www.szse.cn/api/market/ssjjhq/getTimeData?marketId=1&code=300308"]}
 ];
 strategyChanges.unshift(
+  ["2026-07-28 23:05","A 股组合","基准由 2026-07-27 收盘 ¥296,846 → 2026-07-28 收盘 ¥272,057；8/31 +15% 情景目标改为 ¥312,865.55，新 -8% 回撤线 ¥250,292.44。旧组合暂停解除，实际现金仍为 0。"],
+  ["2026-07-28 23:05","麦格米特","¥118 风控已触发的 1,000 股退出不变；新增核心仓退出纪律：其后两日仍不能重回 ¥124，再减 300 股；收盘 ≤ ¥112 或正常化业绩继续恶化，退出余下 400 股。"],
+  ["2026-07-28 23:05","A 股候选","新增中际旭创深度观察：Q1 正常化增长与现金流通过，但趋势和 100 股整手集中度不通过，当前 0 股，不构成立即换仓。"],
   ["2026-07-28 10:13 ET","美股组合","持仓重置为 MSFT 10、MSFL 200、GOOG 20、GGLL 100、AAPL 10；成本采用用户确认值。新基线 $26,387.40，8/31 +15% 情景目标 $30,345.51。"],
   ["2026-07-28","MSFL","新持仓 200 股全部定义为交易仓；微软财报前建议先限价减 80 股，卖点 $17.30/$18.70/$20.30，风险 $14.50，财报通过且 MSFT 两日站上 $400 后才接回。"],
   ["2026-07-28","GGLL","因与 GOOG 重复后的 Alphabet 等效敞口约 95.4%，$94.70–$96.00 先减 50 股；不加仓。完整退出后可用原现金在 QLD 两日趋势确认后替换。"],
@@ -190,11 +194,16 @@ strategyChanges.unshift(
   ["2026-07-28","MSFT","新增 10 股（核心/交易 6/4）；财报前冻结新增，卖点 $406/$425/$445，风险 $365，连续两日站上 $400 后才可接回。"],
   ["2026-07-28","换仓候选","新增 QLD：较 GGLL 更分散的 Nasdaq-100 每日 2 倍工具；当前 $79.45、趋势未确认，状态“继续观察”、0 股。"]
 );
+const strategyDisplayDate="2026-07-28";
+strategyChanges.splice(0,strategyChanges.length,...strategyChanges.filter(function(x){return String(x[0]).slice(0,10)===strategyDisplayDate;}));
 strategyLog.unshift(
+  ["2026-07-28","A 股按 7 月 28 日完整收盘重置 +15% 基线；旧组合回撤暂停解除，个股风险线不变。"],
+  ["2026-07-28","麦格米特增加剩余核心仓退出纪律；中际旭创列为 0 股观察候选。"],
   ["2026-07-28","按用户最新成交重建美股五只持仓与成本；新基线 $26,387.40。"],
   ["2026-07-28","财报前优先降低 MSFL/GGLL 单股杠杆；QLD 仅列为完整换仓后的观察候选。"]
 );
 alertLog.unshift(
+  ["2026-07-28","A 股组合","基准与策略重置·正常","机器人消息 om_x100b69b800b774a0b1f0bfcce090eb8"],
   ["2026-07-28","GGLL","卖出1临界·正常","$93.93 距 $94.70 约 0.8%；尚未到执行价，机器人消息 om_x100b69bfbebc0ca8b04f7444241b0fc"],
   ["2026-07-28","美股组合","持仓与策略重置·正常","机器人消息 om_x100b69bf89cb70acb12b4596a6faa6d"],
   ["2026-07-28","MSFL","财报前降杠杆·正常","建议限价卖 80 股；未确认成交"],
@@ -214,7 +223,7 @@ function marketName(m){return m==="us"?"美股":"A 股"}
 function marketTotals(m){return Object.entries(stocks).filter(function(x){return x[1].market===m}).reduce(function(a,x){let s=x[1], p=fetchedPrice[x[0]];return a+s.shares*p},0)}
 function renderStrategyChanges(){
   const rows=strategyChanges.map(function(x){return '<div>'+x[0]+'</div><div><b>'+x[1]+'</b></div><div>'+x[2]+'</div>'}).join("");
-  document.getElementById("strategy-changes").innerHTML='<div class="change-grid"><div class="change-head">日期</div><div class="change-head">股票</div><div class="change-head">最新策略变动点</div>'+rows+'</div>';
+  document.getElementById("strategy-changes").innerHTML=rows?'<div class="change-grid"><div class="change-head">日期</div><div class="change-head">股票</div><div class="change-head">最新策略变动点</div>'+rows+'</div>':'<p class="method">今日暂无需要改变执行的策略调整。</p>';
 }
 function renderRotationStrategy(){
   document.getElementById("rotation-date").textContent="策略更新："+rotationStrategy.updated;
@@ -231,7 +240,7 @@ function renderMetrics(){
     ["美股新持仓基准",fmt(goal.baseline.us,"$"),goal.baselineDate.us+"；8/31 目标 "+fmt(usTarget,"$")+"（需 +"+fmt(usTarget-goal.baseline.us,"$")+"）"],
     ["美股正常交易快照",fmt(us,"$"),"相对新基准 "+(usRet>=0?"+":"")+(usRet*100).toFixed(2)+"%；回撤线 "+fmt(goal.baseline.us*.92,"$")],
     ["A 股基准",fmt(goal.baseline.cn,"¥"),goal.baselineDate.cn+"；8/31 目标 "+fmt(cnTarget,"¥")+"（需 +"+fmt(cnTarget-goal.baseline.cn,"¥")+"）"],
-    ["A 股收盘快照",fmt(cn,"¥"),"相对基准 "+(cnRet>=0?"+":"")+(cnRet*100).toFixed(2)+"%；已越过 "+fmt(goal.baseline.cn*.92,"¥")+" 回撤线，暂停买入/接回"]
+    ["A 股收盘快照",fmt(cn,"¥"),"相对新基准 "+(cnRet>=0?"+":"")+(cnRet*100).toFixed(2)+"%；新回撤线 "+fmt(goal.baseline.cn*.92,"¥")+"，实际现金池 ¥0"]
   ];
   document.getElementById("metrics").innerHTML=blocks.map(function(x){return '<div class="metric"><small>'+x[0]+'</small><b>'+x[1]+'</b><em>'+x[2]+'</em></div>'}).join("");
 }
@@ -305,7 +314,7 @@ function renderConcentration(){
   const apple=stocks.AAPL.shares*fetchedPrice.AAPL,leveragedNav=(msfl+ggll)/us;
   const msftEffective=(msftDirect+2*msfl)/us,alphaEffective=(googDirect+2*ggll)/us,gross=(msftDirect+2*msfl+googDirect+2*ggll+apple)/us;
   const meg=stocks["麦格米特"].shares*fetchedPrice["麦格米特"]/cn;
-  document.getElementById("concentration").innerHTML='<ul class="research"><li><b>单股杠杆 ETF 净值占比：</b>'+(leveragedNav*100).toFixed(1)+'%（MSFL + GGLL）；两者都没有核心仓。</li><li><b>微软等效敞口：</b>'+(msftEffective*100).toFixed(1)+'%（MSFT + 2×MSFL）；财报前先减 MSFL 80 股。</li><li><b>Alphabet 等效敞口：</b>'+(alphaEffective*100).toFixed(1)+'%（GOOG + 2×GGLL）；$94.70–$96.00 先减 GGLL 50 股。</li><li><b>估算有效总敞口：</b>'+(gross*100).toFixed(1)+'% 净值。每日杠杆并非恒定长期倍数，这只是风险近似而非收益预测。</li><li><b>A 股麦格米特：</b>'+(meg*100).toFixed(1)+'%。交易仓风控已触发；700 股核心仓按基本面失效条件复核。</li></ul><div class="updates"><h3>策略变更记录</h3><ul class="strategy-log">'+strategyLog.map(function(x){return '<li><time>'+x[0]+'</time>'+x[1]+'</li>'}).join("")+'</ul></div>';
+  document.getElementById("concentration").innerHTML='<ul class="research"><li><b>单股杠杆 ETF 净值占比：</b>'+(leveragedNav*100).toFixed(1)+'%（MSFL + GGLL）；两者都没有核心仓。</li><li><b>微软等效敞口：</b>'+(msftEffective*100).toFixed(1)+'%（MSFT + 2×MSFL）；财报前先减 MSFL 80 股。</li><li><b>Alphabet 等效敞口：</b>'+(alphaEffective*100).toFixed(1)+'%（GOOG + 2×GGLL）；$94.70–$96.00 先减 GGLL 50 股。</li><li><b>估算有效总敞口：</b>'+(gross*100).toFixed(1)+'% 净值。每日杠杆并非恒定长期倍数，这只是风险近似而非收益预测。</li><li><b>A 股麦格米特：</b>'+(meg*100).toFixed(1)+'%。1,000 股交易仓风控已触发；余下核心仓按 ¥124 修复与 ¥112 硬风控分层处理。</li></ul>';
 }
 async function decode(key){
   const raw=Uint8Array.from(atob(encodedSeries[key]),function(c){return c.charCodeAt(0)});
